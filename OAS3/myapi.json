@@ -1,0 +1,108 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API which returns personal data",
+    "version": "1.0.0",
+    "title": "RegyRest - Personal Data Registry API Rest",
+    "termsOfService": "http://myserver.rest/terms/",
+    "contact": {
+      "email": "domenico.cerasuolo@gmail.com"
+    },
+    "license": {
+      "name": "CC-BY-4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/deed.en"
+    }
+  },
+  "host": "myserver.rest",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "registry",
+      "description": "Personal data registry - A collection of personal data (fiscal code,name, surname, birth date)",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "httpa://myserver.rest"
+      }
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/people/{FiscalCode}": {
+      "get": {
+        "tags": [
+          "people"
+        ],
+        "summary": "Find personal data by FiscalCode",
+        "description": "The system receives one's fiscal code as an input, validates it and returns it as a json code including her name, surname and date of birth If a fiscal code is partial, the system identifies a list of people whose personal fiscal codes start with the given portion of fiscal code",
+        "operationId": "getPersonalDataByFiscalCode",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "FiscalCode",
+            "in": "path",
+            "description": "fiscal code of person to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A person data objects array.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "FiscalCode": {
+                  "type": "string",
+                  "example": "CRSDNC********"
+                },
+                "Name": {
+                  "type": "string",
+                  "example": "Domenico"
+                },
+                "Surname": {
+                  "type": "string",
+                  "example": "Cerasuolo"
+                },
+                "BornDate": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "1975-11-05T00:00:00.000Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid fiscal code supplied"
+          },
+          "404": {
+            "description": "Object not found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "OAuth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://myserver.rest/oauth/authorize",
+      "tokenUrl": "https://myserve.rest/oauth/token",
+      "scopes": {
+        "read": "Grants read access"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Registry",
+    "url": "https://myserver.rest"
+  }
+}
